@@ -1,6 +1,13 @@
+
 #define WIN32_LEAN_AND_MEAN
+#define DIRECTINPUT_VERSION 0x0800
+
 #include <windows.h>
+
+#define DirectInput8Create DirectInput8Create_HeaderDeclaration
 #include <dinput.h>
+#undef DirectInput8Create
+
 #include <strsafe.h>
 
 using DirectInput8CreateFn = HRESULT (WINAPI *)(HINSTANCE, DWORD, REFIID, LPVOID*, LPUNKNOWN);
