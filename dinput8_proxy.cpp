@@ -95,6 +95,27 @@ HRESULT WINAPI DirectInput8Create(HINSTANCE instance, DWORD version, REFIID riid
 }
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID) {
-    if (reason == DLL_PROCESS_ATTACH) DisableThreadLibraryCalls(instance);
+
+    if (reason == DLL_PROCESS_ATTACH) {
+        DisableThreadLibraryCalls(instance);
+
+        HANDLE file = CreateFileW(
+            L"C:\\LFS_DInput8_Loaded.txt",
+            GENERIC_WRITE,
+            FILE_SHARE_READ,
+            nullptr,
+            CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL,
+            nullptr
+        );
+
+        if (file != INVALID_HANDLE_VALUE) {
+            const char* msg = "LFS dinput8 proxy loaded successfully";
+            DWORD written = 0;
+            WriteFile(file, msg, (DWORD)strlen(msg), &written, nullptr);
+            CloseHandle(file);
+        }
+    }
+
     return TRUE;
 }
