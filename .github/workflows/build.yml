@@ -1,0 +1,33 @@
+
+name: Build LFS DInput8 Diagnostic DLL
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build DLL
+        shell: cmd
+        run: |
+          msbuild LFS_DInput8_Diagnostic.vcxproj /m /p:Configuration=Release /p:Platform=x64
+
+      - name: Upload DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: LFS-DInput8-Diagnostic-x64
+          path: |
+            **/dinput8.dll
+          if-no-files-found: error
